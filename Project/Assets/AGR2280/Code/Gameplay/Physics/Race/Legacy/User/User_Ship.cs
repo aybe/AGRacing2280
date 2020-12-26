@@ -782,9 +782,9 @@ public class User_Ship : MonoBehaviour {
 
         // Camera Boosting Changes
         Camera.main.fieldOfView = currentCameraFOV;
-		Camera.main.GetComponent<Vignetting>().chromaticAberration = cameraCromatic;
-		Camera.main.GetComponent<CameraMotionBlur> ().previewScale = new Vector3(0,0, cameraBoostEffect);
-		Camera.main.GetComponent<ScreenOverlay> ().intensity = cameraRespawnOverlay;
+		//Camera.main.GetComponent<Vignetting>().chromaticAberration = cameraCromatic;
+		//Camera.main.GetComponent<CameraMotionBlur> ().previewScale = new Vector3(0,0, cameraBoostEffect);
+		//Camera.main.GetComponent<ScreenOverlay> ().intensity = cameraRespawnOverlay;
 		if (isThrusting)
         {
             currentAccel = Mathf.Lerp(currentAccel, accelCap, Time.deltaTime * 2);

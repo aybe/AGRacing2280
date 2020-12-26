@@ -135,17 +135,17 @@ public class ShipChaseCam : MonoBehaviour {
 			currentCameraHeight = 0;
 		}
 
-		// Set FOV
-		if (targetShip.GetComponent<ShipController>().shipBoostTimer > 1)
-		{
-			GetComponent<Camera>().fieldOfView = Mathf.Lerp(GetComponent<Camera>().fieldOfView, currentCameraFOV + targetShip.GetComponent<ShipController>().cameraBoostFOV, Time.deltaTime * 5);
-			GetComponent<Vignetting>().chromaticAberration = Mathf.Lerp(GetComponent<Vignetting>().chromaticAberration, targetShip.GetComponent<ShipController>().shipBoostAmount, Time.deltaTime / 10);
-			GetComponent<Vignetting>().chromaticAberration = Mathf.Clamp(GetComponent<Vignetting>().chromaticAberration, 0, 35);
-		} else
-		{
-			GetComponent<Camera>().fieldOfView = Mathf.Lerp(GetComponent<Camera>().fieldOfView, currentCameraFOV, Time.deltaTime * 5);
-			GetComponent<Vignetting>().chromaticAberration = Mathf.Lerp(GetComponent<Vignetting>().chromaticAberration, 0, Time.deltaTime * 5);
-		}
+		//// Set FOV
+		//if (targetShip.GetComponent<ShipController>().shipBoostTimer > 1)
+		//{
+		//	GetComponent<Camera>().fieldOfView = Mathf.Lerp(GetComponent<Camera>().fieldOfView, currentCameraFOV + targetShip.GetComponent<ShipController>().cameraBoostFOV, Time.deltaTime * 5);
+		//	GetComponent<Vignetting>().chromaticAberration = Mathf.Lerp(GetComponent<Vignetting>().chromaticAberration, targetShip.GetComponent<ShipController>().shipBoostAmount, Time.deltaTime / 10);
+		//	GetComponent<Vignetting>().chromaticAberration = Mathf.Clamp(GetComponent<Vignetting>().chromaticAberration, 0, 35);
+		//} else
+		//{
+		//	GetComponent<Camera>().fieldOfView = Mathf.Lerp(GetComponent<Camera>().fieldOfView, currentCameraFOV, Time.deltaTime * 5);
+		//	GetComponent<Vignetting>().chromaticAberration = Mathf.Lerp(GetComponent<Vignetting>().chromaticAberration, 0, Time.deltaTime * 5);
+		//}
 	}
 
 	void ChaseCam()
