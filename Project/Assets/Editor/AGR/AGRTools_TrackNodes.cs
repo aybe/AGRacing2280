@@ -271,7 +271,8 @@ public class AGRTools_TrackNodes : EditorWindow {
 		newNode.transform.position = Vector3.zero;
 		newNode.transform.position = new Vector3(hitLoc.x, hitLoc.y + (newNode.transform.localScale.y / 2) + 5.5f, hitLoc.z);
 		newNode.name = "RaceGate_" + nodeCount;
-		newNode.renderer.material = nodeMat;
+		var nodeRenderer = newNode.GetComponent<Renderer>();
+		nodeRenderer.material = nodeMat;
 		newNode.AddComponent<NodeID>();
 		newNode.AddComponent<RaceGateRender>();
 		newNode.AddComponent<NodeInformation>();
@@ -298,7 +299,8 @@ public class AGRTools_TrackNodes : EditorWindow {
 		aiHelper.transform.position = newNode.transform.position;
 		aiHelper.transform.parent = newNode.transform;
 		aiHelper.name = "thisGateAIHelper";
-		aiHelper.renderer.material = aiPoint;
+		var aiHelperRenderer = aiHelper.GetComponent<Renderer>();
+		aiHelperRenderer.material = aiPoint;
 		aiHelper.GetComponent<BoxCollider>().enabled = false;
 
 		Material APPoint = Resources.Load("AGREditing/Materials/AGRArrow") as Material;
@@ -307,7 +309,8 @@ public class AGRTools_TrackNodes : EditorWindow {
 		APHelper.transform.position = newNode.transform.position;
 		APHelper.transform.parent = newNode.transform;
 		APHelper.name = "thisGateAPHelper";
-		APHelper.renderer.material = APPoint;
+		var apHelperRenderer = APHelper.GetComponent<Renderer>();
+		apHelperRenderer.material = APPoint;
 		APHelper.GetComponent<BoxCollider>().enabled = false;
 
 		

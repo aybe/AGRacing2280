@@ -207,7 +207,7 @@ public class ShipChaseCam : MonoBehaviour {
 		}
 
 		// Distance
-		currentCameraInterpolatedLength = currentCameraLength - targetShip.transform.InverseTransformDirection(targetShip.rigidbody.velocity).z / (currentCameraCalculatedSpring / (Time.deltaTime * (currentCameraCalculatedSpring - 2.2f))) - xLocalLength;
+		currentCameraInterpolatedLength = currentCameraLength - targetShip.transform.InverseTransformDirection(targetShip.GetComponent<Rigidbody>().velocity).z / (currentCameraCalculatedSpring / (Time.deltaTime * (currentCameraCalculatedSpring - 2.2f))) - xLocalLength;
 
 		// Briefly parent camera to help with distance
 		transform.parent = targetShip.transform;
@@ -247,7 +247,7 @@ public class ShipChaseCam : MonoBehaviour {
 
 		Vector3 lookAtPosition = targetShip.transform.TransformPoint(0, currentCameraLookAtHeight, currentCameraLookAtLength + cameraMoveLength);
 
-		float lookAtHeightMoveVel = targetShip.rigidbody.velocity.y;
+		float lookAtHeightMoveVel = targetShip.GetComponent<Rigidbody>().velocity.y;
 		if (lookAtHeightMoveVel != 0)
 		{
 			lookAtHeightMoveVel /= currentCameraSpring;

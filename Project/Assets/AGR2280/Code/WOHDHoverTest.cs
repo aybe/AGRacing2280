@@ -32,6 +32,7 @@ public class WOHDHoverTest : MonoBehaviour {
 		frontCastPos = transform.TransformPoint(new Vector3(0,0, RaycastOffset));
 
 		RaycastHit hit;
+		var component = GetComponent<Rigidbody>();
 		if (Physics.Raycast(frontCastPos, -Vector3.up, out hit))
 		{
 			Debug.DrawLine(frontCastPos, hit.point);
@@ -48,7 +49,7 @@ public class WOHDHoverTest : MonoBehaviour {
 				Vector3 springN = spring / length;
 				Vector3 restoreForce = springN*(displacement*springCost);
 
-				rigidbody.AddForceAtPosition(Vector3.up * restoreForce.y, frontCastPos);
+				component.AddForceAtPosition(Vector3.up * restoreForce.y, frontCastPos);
 				print(restoreForce);
 
 			}
@@ -71,7 +72,7 @@ public class WOHDHoverTest : MonoBehaviour {
 				Vector3 springN = spring / length;
 				Vector3 restoreForce = springN*(displacement*springCost);
 
-				rigidbody.AddForceAtPosition(Vector3.up * restoreForce.y, backCastPos);
+				component.AddForceAtPosition(Vector3.up * restoreForce.y, backCastPos);
 				
 			}
 		}
@@ -84,6 +85,6 @@ public class WOHDHoverTest : MonoBehaviour {
 		{
 			shipGravity = Mathf.Lerp (shipGravity, airGravity, Time.deltaTime * 1.8f);
 		}
-		rigidbody.AddForce(new Vector3(0, -shipGravity, 0));
+		component.AddForce(new Vector3(0, -shipGravity, 0));
 	}
 }

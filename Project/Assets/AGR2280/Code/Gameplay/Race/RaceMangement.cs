@@ -56,22 +56,26 @@ public class RaceMangement : MonoBehaviour {
 	{
         if (!countDownFinish)
         {
+            var r1 = PlayerStartRing1.GetComponent<Renderer>();
+            var r2 = PlayerStartRing2.GetComponent<Renderer>();
+            var r3 = PlayerStartRing3.GetComponent<Renderer>();
+            var r4 = PlayerStartRing4.GetComponent<Renderer>();
             if (fadeTimer < 50)
             {
-                PlayerStartRing1.renderer.material.color = Color.Lerp(PlayerStartRing1.renderer.material.color, currentColor, Time.deltaTime * 5);
-                PlayerStartRing2.renderer.material.color = Color.Lerp(PlayerStartRing2.renderer.material.color, currentColor, Time.deltaTime * 2);
-                PlayerStartRing3.renderer.material.color = Color.Lerp(PlayerStartRing3.renderer.material.color, currentColor, Time.deltaTime);
-                PlayerStartRing4.renderer.material.color = Color.Lerp(PlayerStartRing4.renderer.material.color, currentColor, Time.deltaTime / 2);
+                r1.material.color = Color.Lerp(r1.material.color, currentColor, Time.deltaTime * 5);
+                r2.material.color = Color.Lerp(r2.material.color, currentColor, Time.deltaTime * 2);
+                r3.material.color = Color.Lerp(r3.material.color, currentColor, Time.deltaTime);
+                r4.material.color = Color.Lerp(r4.material.color, currentColor, Time.deltaTime / 2);
             }
             if (raceStarted)
             {
                 if (fadeTimer > 1)
                 {
-                    PlayerStartRing1.renderer.enabled = false;
-                    PlayerStartRing2.renderer.enabled = false;
-                    PlayerStartRing3.renderer.enabled = false;
-                    PlayerStartRing4.renderer.enabled = false;
-                    PlayerStartText.renderer.enabled = false;
+                    r1.enabled = false;
+                    r2.enabled = false;
+                    r3.enabled = false;
+                    r4.enabled = false;
+                    PlayerStartText.GetComponent<Renderer>().enabled = false;
                     countDownFinish = true;
                 }
             }

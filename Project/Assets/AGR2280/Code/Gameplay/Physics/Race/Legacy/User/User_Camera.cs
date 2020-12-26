@@ -164,8 +164,9 @@ public class User_Camera : MonoBehaviour {
 
 		origDistance = 10.8f;
 		height = 3.7f;
-		
-		distance = origDistance - target.InverseTransformDirection(target.rigidbody.velocity).z / (damping / (Time.deltaTime * (damping - accelerationDistance)));
+
+		var component = GetComponent<Rigidbody>();
+		distance = origDistance - target.InverseTransformDirection(component.velocity).z / (damping / (Time.deltaTime * (damping - accelerationDistance)));
 		
 		transform.parent = target.transform;
 		transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, -(distance + boostDistance));
@@ -309,8 +310,9 @@ public class User_Camera : MonoBehaviour {
 
         origDistance = 14f;
         height = 4f;
-        
-        distance = origDistance - target.InverseTransformDirection(target.rigidbody.velocity).z / (damping / (Time.deltaTime * (damping - accelerationDistance)));
+
+        var component = GetComponent<Rigidbody>();
+        distance = origDistance - target.InverseTransformDirection(component.velocity).z / (damping / (Time.deltaTime * (damping - accelerationDistance)));
         
         transform.parent = target.transform;
         transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, -(distance + boostDistance));

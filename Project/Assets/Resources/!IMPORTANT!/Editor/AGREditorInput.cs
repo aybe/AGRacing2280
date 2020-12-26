@@ -21,13 +21,13 @@ public class AGREditorInput : Editor {
             input = KeyCode.None;
         }
 
-        if (Event.current.type == EventType.keyDown && !keyDown)
+        if (Event.current.type == EventType.KeyDown && !keyDown)
         {
             input = Event.current.keyCode;
             keyDown = true;
         }
 
-        if (Event.current.type == EventType.keyUp)
+        if (Event.current.type == EventType.KeyUp)
         {
             keyDown = false;
         }

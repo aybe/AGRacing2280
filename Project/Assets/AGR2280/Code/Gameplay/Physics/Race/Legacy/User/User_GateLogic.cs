@@ -78,7 +78,7 @@ public class User_GateLogic : MonoBehaviour {
 	{
 		if (Collide.gameObject.tag == "Gate") 
 		{
-			string gateID = Collide.collider.gameObject.name.Remove(0, 9);
+			string gateID = Collide.GetComponent<Collider>().gameObject.name.Remove(0, 9);
 			int gateExtractID = int.Parse(gateID);
 			currentGate = gateExtractID;
 

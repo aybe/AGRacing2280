@@ -20,7 +20,7 @@ public class ShipWindLine : MonoBehaviour {
 			WindOpacity = Color.Lerp(WindOpacity, new Color(1, 1, 1, 0), Time.deltaTime * 2);
 		}
 		
-		renderer.material.SetColor("_TintColor", WindOpacity);
+		GetComponent<Renderer>().material.SetColor("_TintColor", WindOpacity);
 		rotY = 180 + -Target.GetComponent<ShipController>().rotationForce * 8;
 		transform.parent.localRotation = Quaternion.Euler(0, rotY, 0);
 		

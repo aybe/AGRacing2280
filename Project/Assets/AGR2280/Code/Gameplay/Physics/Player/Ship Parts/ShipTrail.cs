@@ -42,7 +42,7 @@ public class ShipTrail : MonoBehaviour {
 		}
 
 		// Apply Properties
-		renderer.material.SetColor("_TintColor", new Color(1, 1, 1, trailOpacity));
+		GetComponent<Renderer>().material.SetColor("_TintColor", new Color(1, 1, 1, trailOpacity));
 		GetComponent<TrailRenderer>().startWidth = trailStartSize;
 		GetComponent<TrailRenderer>().endWidth = trailEndSize;
 	}

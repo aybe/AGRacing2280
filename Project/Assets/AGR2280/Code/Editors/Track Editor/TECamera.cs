@@ -80,16 +80,17 @@ public class TECamera : MonoBehaviour {
 		transform.rotation = Quaternion.Euler (cameraMouseRotX, transform.eulerAngles.y + cameraInputX, 0);
 
 		// Apply Movement
+		var component = GetComponent<Rigidbody>();
 		if (fastMove)
 		{
-			rigidbody.AddRelativeForce(Vector3.forward * (verAxis * 300));
-			rigidbody.AddRelativeForce(Vector3.right * (horAxis * 300));
-			rigidbody.AddForce(new Vector3(0,(upAxis * 300),0));
+			component.AddRelativeForce(Vector3.forward * (verAxis * 300));
+			component.AddRelativeForce(Vector3.right * (horAxis * 300));
+			component.AddForce(new Vector3(0,(upAxis * 300),0));
 		} else
 		{
-			rigidbody.AddRelativeForce(Vector3.forward * (verAxis * 150));
-			rigidbody.AddRelativeForce(Vector3.right * (horAxis * 150));
-			rigidbody.AddForce(new Vector3(0,(upAxis * 150),0));
+			component.AddRelativeForce(Vector3.forward * (verAxis * 150));
+			component.AddRelativeForce(Vector3.right * (horAxis * 150));
+			component.AddForce(new Vector3(0,(upAxis * 150),0));
 		}
 
 		transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, 0, 1000), transform.position.z);

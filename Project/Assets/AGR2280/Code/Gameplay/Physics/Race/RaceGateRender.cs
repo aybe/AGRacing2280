@@ -6,7 +6,7 @@ public class RaceGateRender : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
     {
-        renderer.enabled = false;
+        GetComponent<Renderer>().enabled = false;
 	}
 	
 	// Update is called once per frame

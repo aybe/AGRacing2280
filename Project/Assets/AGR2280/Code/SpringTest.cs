@@ -18,6 +18,7 @@ public class SpringTest : MonoBehaviour {
 	void FixedUpdate () 
 	{
 		RaycastHit hit;
+		var component = GetComponent<Rigidbody>();
 		if (Physics.Raycast(transform.position , -Vector3.up, out hit))
         {
 
@@ -36,7 +37,7 @@ public class SpringTest : MonoBehaviour {
 				hoverForce = (hit.distance + baseHeight) - baseSpringForce;
 				hoverForce *= hit.distance - ((baseHeight * damp) + distance);
                 print (hoverForce);
-				rigidbody.AddForce(Vector3.up * hoverForce);
+				component.AddForce(Vector3.up * hoverForce);
 			} else
 			{
 				fallSpeed = Mathf.Lerp(fallSpeed, 115 * 6 , Time.deltaTime * 1.8f);
@@ -46,6 +47,6 @@ public class SpringTest : MonoBehaviour {
 			fallSpeed = Mathf.Lerp(fallSpeed, 115 * 6 , Time.deltaTime * 1.8f);
 		}
 
-        rigidbody.AddForce(-Vector3.up * fallSpeed);
+        component.AddForce(-Vector3.up * fallSpeed);
 	}
 }

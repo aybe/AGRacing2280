@@ -95,12 +95,13 @@ public class RacerInfoReturn : MonoBehaviour {
 
 	void OnTriggerEnter(Collider other)
 	{
-		if (other.collider.gameObject.tag == "Gate")
+		var otherCollider = other.GetComponent<Collider>();
+		if (otherCollider.gameObject.tag == "Gate")
 		{
-			GetComponent<ShipController>().respawnPosition = other.collider.gameObject.transform.position;
-			GetComponent<ShipController>().respawnRotation = Quaternion.Euler(0, other.collider.gameObject.transform.eulerAngles.y, 0);
+			GetComponent<ShipController>().respawnPosition = otherCollider.gameObject.transform.position;
+			GetComponent<ShipController>().respawnRotation = Quaternion.Euler(0, otherCollider.gameObject.transform.eulerAngles.y, 0);
 
-			string nodeName = other.collider.name;
+			string nodeName = otherCollider.name;
 			string nodeID = nodeName.Remove(0, 9).ToString();
 			thisCurrentGate = int.Parse(nodeID);
 			if (GameObject.Find("RaceGate_" + (thisCurrentGate + 4)))
@@ -120,7 +121,7 @@ public class RacerInfoReturn : MonoBehaviour {
 		}
 
 		// Pass gate
-		if ((other.collider.gameObject.name == "RaceGate_0") && !calculatedLap)
+		if ((otherCollider.gameObject.name == "RaceGate_0") && !calculatedLap)
 		{
 			
 			if (thisRacerLap > 1)
@@ -388,7 +389,7 @@ public class RacerInfoReturn : MonoBehaviour {
 					}
 					string path = documentsFolder + "/AGR2280/Screenshots/";
 
-					Application.CaptureScreenshot(path + "Screenshot" + DateTime.Today.Day.ToString() + DateTime.Today.Month.ToString() + DateTime.Today.Year.ToString() + ".png");
+					ScreenCapture.CaptureScreenshot(path + "Screenshot" + DateTime.Today.Day.ToString() + DateTime.Today.Month.ToString() + DateTime.Today.Year.ToString() + ".png");
 					ResultsTitle = "RESULTS - SCREENSHOT SAVED!";
 				}
 

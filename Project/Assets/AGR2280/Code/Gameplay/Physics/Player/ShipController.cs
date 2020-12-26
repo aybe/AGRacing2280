@@ -608,8 +608,9 @@ public class ShipController : MonoBehaviour {
 		isThrusting = true;
 
 
-		Vector3 velocity = transform.InverseTransformDirection(rigidbody.velocity);
-		rigidbody.AddRelativeForce(new Vector3(velocity.x * -rigidbody.mass * rigidbody.drag * 1.2f ,0,0) * Time.deltaTime, ForceMode.Impulse);
+		var component = GetComponent<Rigidbody>();
+		Vector3 velocity = transform.InverseTransformDirection(component.velocity);
+		component.AddRelativeForce(new Vector3(velocity.x * -component.mass * component.drag * 1.2f ,0,0) * Time.deltaTime, ForceMode.Impulse);
 
 		float lookRot = Vector3.Angle(transform.forward, GetComponent<RacerInfoReturn>().nextAPObject.position - transform.position);
 		Vector3 nextNodeLocal = transform.InverseTransformPoint(GetComponent<RacerInfoReturn>().nextAPObject.position);
@@ -792,6 +793,7 @@ public class ShipController : MonoBehaviour {
 
 		// First raycast
 		RaycastHit frontHit;
+		var component = GetComponent<Rigidbody>();
 		if (Physics.Raycast(transform.TransformPoint(0,0, RaycastOffset), -Vector3.up, out frontHit))
 		{
 			canRespawn = false;
@@ -809,7 +811,7 @@ public class ShipController : MonoBehaviour {
 
 				shipFrontHoverDamping = Mathf.Lerp(shipFrontHoverDamping, 10, Time.deltaTime * shipAntiGravLandingRebound);
 				shipAnglePitchHelp = 0;
-				rigidbody.angularDrag = groundAngularDrag;
+				component.angularDrag = groundAngularDrag;
 
 				transform.rotation = Quaternion.Euler(transform.eulerAngles.x + (currentPitch * 2), transform.eulerAngles.y, transform.eulerAngles.z);
 
@@ -839,14 +841,14 @@ public class ShipController : MonoBehaviour {
 					shipBaseHover = 95;
 					suspensionForce = shipBaseHover * (shipAntiGravRideHeight * 2 - (frontHit.distance));	
 				}
-				suspensionForce -= 0.5f * rigidbody.velocity.y;
-				rigidbody.AddForceAtPosition(new Vector3(0, suspensionForce, 0), transform.TransformPoint(0,0, RaycastOffset));
+				suspensionForce -= 0.5f * component.velocity.y;
+				component.AddForceAtPosition(new Vector3(0, suspensionForce, 0), transform.TransformPoint(0,0, RaycastOffset));
 
 				// Complete stop
 				
 				if (RaycastFrontDistance < shipAntiGravRideHeight)
 				{
-					rigidbody.angularVelocity = new Vector3(0,0,0);
+					component.angularVelocity = new Vector3(0,0,0);
 					if (shipReachedTerminalVelocity)
 					{
 						// Wobble
@@ -854,16 +856,16 @@ public class ShipController : MonoBehaviour {
 						shipWobbleSpeed = 6;
 						shipWobbleTime = 0;
 						Audio_FloorHit.GetComponent<AudioSource>().Play();
-						rigidbody.velocity = new Vector3(rigidbody.velocity.x, 0, rigidbody.velocity.z);
-						rigidbody.AddForceAtPosition(-Vector3.up * 500, RaycastFrontPos);
-						rigidbody.AddForce(Vector3.up * 80);
+						component.velocity = new Vector3(component.velocity.x, 0, component.velocity.z);
+						component.AddForceAtPosition(-Vector3.up * 500, RaycastFrontPos);
+						component.AddForce(Vector3.up * 80);
 						shipReachedTerminalVelocity = false;
 					}
 				}
 
 			} else
 			{	
-				rigidbody.angularDrag = Mathf.Lerp(rigidbody.angularDrag, 100, Time.deltaTime * 5);
+				component.angularDrag = Mathf.Lerp(component.angularDrag, 100, Time.deltaTime * 5);
 				float shipAngle = 360 - transform.localEulerAngles.x;
 				shipAnglePitchHelp = Mathf.Lerp (shipAnglePitchHelp, currentPitch * 5, Time.deltaTime * 2);
 				if (shipAnglePitchHelp < 0)
@@ -897,7 +899,7 @@ public class ShipController : MonoBehaviour {
 			}
 		} else
 		{
-			rigidbody.angularDrag = Mathf.Lerp(rigidbody.angularDrag, 100, Time.deltaTime * 5);
+			component.angularDrag = Mathf.Lerp(component.angularDrag, 100, Time.deltaTime * 5);
 			// Nose Dive
 			float shipAngle = 360 - transform.localEulerAngles.x;
 			shipAnglePitchHelp = Mathf.Lerp (shipAnglePitchHelp, currentPitch * 5, Time.deltaTime * 2);
@@ -922,7 +924,7 @@ public class ShipController : MonoBehaviour {
 			if (backHit.distance < shipAntiGravRideHeight)
 			{
 				// Complete stop
-				rigidbody.angularVelocity = new Vector3(0,0,0);
+				component.angularVelocity = new Vector3(0,0,0);
 
 				// Apply Force
 				shipBaseHover = 25;
@@ -933,8 +935,8 @@ public class ShipController : MonoBehaviour {
 					shipBaseHover = 55;
 					suspensionForce = shipBaseHover * (shipAntiGravRideHeight * 2 - (frontHit.distance));	
 				}
-				suspensionForce -= 0.2f * rigidbody.velocity.y;
-				rigidbody.AddForceAtPosition(new Vector3(0, suspensionForce, 0), transform.TransformPoint(0,0, -RaycastOffset));
+				suspensionForce -= 0.2f * component.velocity.y;
+				component.AddForceAtPosition(new Vector3(0, suspensionForce, 0), transform.TransformPoint(0,0, -RaycastOffset));
 
 				// Fake angular velocity
 				transform.Rotate(Vector3.right * (Mathf.Clamp((backHit.point.y + frontHit.distance) - (frontHit.point.y + backHit.distance), -0.2f, 0.2f)));
@@ -958,36 +960,36 @@ public class ShipController : MonoBehaviour {
 			{
 				isAR = true;
 				shipFallingSlowdown = Mathf.Lerp( shipFallingSlowdown, 1.8f, Time.deltaTime * 5);
-				shipGravity = Mathf.Lerp(shipGravity, shipPhysicsFlightGravity * (rigidbody.drag + shipPhysicsMass), Time.deltaTime * shipFallingSlowdown);
+				shipGravity = Mathf.Lerp(shipGravity, shipPhysicsFlightGravity * (component.drag + shipPhysicsMass), Time.deltaTime * shipFallingSlowdown);
 
 				// Terminal Velocity Check
-				if (shipGravity > (((shipPhysicsFlightGravity * (rigidbody.drag + shipPhysicsMass)) / 4) * 2.8f))
+				if (shipGravity > (((shipPhysicsFlightGravity * (component.drag + shipPhysicsMass)) / 4) * 2.8f))
 				{
 					shipReachedTerminalVelocity = true;
 				}
 			} else 
 			{
-				if (shipGravity > shipPhysicsTrackGravity * (shipPhysicsFlightGravity / rigidbody.drag) / (rigidbody.drag * 2))
+				if (shipGravity > shipPhysicsTrackGravity * (shipPhysicsFlightGravity / component.drag) / (component.drag * 2))
 				{
-					shipGravity = shipPhysicsTrackGravity * (shipPhysicsFlightGravity / rigidbody.drag) / (rigidbody.drag * 2);
+					shipGravity = shipPhysicsTrackGravity * (shipPhysicsFlightGravity / component.drag) / (component.drag * 2);
 				}
 
 				if (frontHit.distance > shipAntiGravRideHeight + (shipAntiGravReboundJumpTime / 2) && isAR)
 				{
-					shipGravity = shipPhysicsTrackGravity * (shipPhysicsFlightGravity / rigidbody.drag) / (rigidbody.drag * 2);
+					shipGravity = shipPhysicsTrackGravity * (shipPhysicsFlightGravity / component.drag) / (component.drag * 2);
 				}
 				shipFallingSlowdown = Mathf.Lerp( shipFallingSlowdown, shipAntiGravRebound * 10, Time.deltaTime * shipAntiGravLandingRebound);
-				shipGravity = Mathf.Lerp(shipGravity, shipPhysicsTrackGravity * (shipPhysicsFlightGravity / rigidbody.drag) / rigidbody.drag, Time.deltaTime * shipFallingSlowdown);
+				shipGravity = Mathf.Lerp(shipGravity, shipPhysicsTrackGravity * (shipPhysicsFlightGravity / component.drag) / component.drag, Time.deltaTime * shipFallingSlowdown);
 			}
 			backGravity = Mathf.Lerp(backGravity, shipGravity / 10, Time.deltaTime * shipPhysicsNormalGravity * 10);
 
 		}
 
 		// Apply Gravity
-		rigidbody.AddForce(new Vector3(0,-shipGravity,0));
+		component.AddForce(new Vector3(0,-shipGravity,0));
 
 		// Apply backend gravity
-		rigidbody.AddForceAtPosition(new Vector3(0,-backGravity,0), RaycastBackPos);
+		component.AddForceAtPosition(new Vector3(0,-backGravity,0), RaycastBackPos);
 
 		// Test Turbo
 
@@ -1034,6 +1036,7 @@ public class ShipController : MonoBehaviour {
 		
 		// First raycast
 		RaycastHit frontHit;
+		var component = GetComponent<Rigidbody>();
 		if (Physics.Raycast(RaycastFrontPos, -transform.up, out frontHit))
 		{
 			RaycastFrontDistance = frontHit.distance;
@@ -1049,7 +1052,7 @@ public class ShipController : MonoBehaviour {
 				
 				shipFrontHoverDamping = Mathf.Lerp(shipFrontHoverDamping, 10, Time.deltaTime * shipAntiGravLandingRebound);
 				shipAnglePitchHelp = 0;
-				rigidbody.angularDrag = 0.01f;
+				component.angularDrag = 0.01f;
 
 				
 				// Rotate to track normals
@@ -1064,12 +1067,12 @@ public class ShipController : MonoBehaviour {
 
 				float magStripForceMult = (shipAntiGravRideHeight - frontHit.distance) / shipAntiGravRideHeight;
 				Vector3 magStripForceApp = (transform.up * 10000 * magStripForceMult);
-				rigidbody.AddForce(magStripForceApp);
+				component.AddForce(magStripForceApp);
 				// Complete stop
 				
 				if (RaycastFrontDistance < shipAntiGravRideHeight)
 				{
-					rigidbody.angularVelocity = new Vector3(0, 0, 0);
+					component.angularVelocity = new Vector3(0, 0, 0);
 				}
 				
 			}
@@ -1087,7 +1090,7 @@ public class ShipController : MonoBehaviour {
 		}
 		
 		// Apply Gravity
-		rigidbody.AddForce(-transform.up * 500);
+		component.AddForce(-transform.up * 500);
 		
 		// Test Turbo
 		
@@ -1120,8 +1123,9 @@ public class ShipController : MonoBehaviour {
 				shipAccel = 0;
 				rollSuccess = false;
 				rotationForce = 0;
-				rigidbody.velocity = new Vector3(0,0,0);
-				rigidbody.angularVelocity = new Vector3(0,0,0);
+				var component = GetComponent<Rigidbody>();
+				component.velocity = new Vector3(0,0,0);
+				component.angularVelocity = new Vector3(0,0,0);
 				respawnTimer = 0;
 			}
 		}
@@ -1195,12 +1199,13 @@ public class ShipController : MonoBehaviour {
 
 			// Apply airbrake drag
 			Vector3 airbrakeForceAxis = transform.TransformDirection(Vector3.left);
+			var component = GetComponent<Rigidbody>();
 			if (isGrounded)
 			{
-				rigidbody.AddForceAtPosition(airbrakeForceAxis  * airBrakeForce * (shipAirBrakeVelocityAmount * shipAirbrakeDrag), RaycastBackPos);
+				component.AddForceAtPosition(airbrakeForceAxis  * airBrakeForce * (shipAirBrakeVelocityAmount * shipAirbrakeDrag), RaycastBackPos);
 			} else 
 			{
-				rigidbody.AddForceAtPosition(airbrakeForceAxis  * airBrakeForce * ((shipAirBrakeVelocityAmount * shipAirbrakeDrag * 12)), RaycastBackPos);
+				component.AddForceAtPosition(airbrakeForceAxis  * airBrakeForce * ((shipAirBrakeVelocityAmount * shipAirbrakeDrag * 12)), RaycastBackPos);
 			}
 
 		} else
@@ -1378,7 +1383,8 @@ public class ShipController : MonoBehaviour {
 			}
 			
 		}
-		
+
+		var component = GetComponent<Rigidbody>();
 		if (shipThrust > ((shipEngineMaxSpeed) / 2))
 		{
 			if (inputAirbrake != 0)
@@ -1388,7 +1394,7 @@ public class ShipController : MonoBehaviour {
 					shipAirBrakeAccelLossVelocityDamper = Mathf.Lerp (shipAirBrakeAccelLossVelocityDamper, shipAntiGravGripAir * 1.6f, Time.deltaTime * 3);
 				} else 
 				{
-					shipAirBrakeAccelLossVelocityDamper = Mathf.Lerp (shipAirBrakeAccelLossVelocityDamper, shipAntiGravGripGround * rigidbody.drag, Time.deltaTime * shipAirbrakeGrip);
+					shipAirBrakeAccelLossVelocityDamper = Mathf.Lerp (shipAirBrakeAccelLossVelocityDamper, shipAntiGravGripGround * component.drag, Time.deltaTime * shipAirbrakeGrip);
 				}
 				shipAirbrakeAccelLossVelocity = Mathf.Lerp (shipAirbrakeAccelLossVelocity, 1, Time.deltaTime * shipAirBrakeAccelLossVelocityDamper);
 				deaccelAB = (rotationForce / shipAirbrakeAccelLossVelocity) * (shipAccel);
@@ -1441,7 +1447,7 @@ public class ShipController : MonoBehaviour {
 					shipThrust = shipBoostAmount;
 				}
 			}
-			rigidbody.AddRelativeForce(Vector3.forward * shipThrust);
+			component.AddRelativeForce(Vector3.forward * shipThrust);
 		}
 
 		/*
@@ -1461,12 +1467,12 @@ public class ShipController : MonoBehaviour {
 
 	void ShipSideShift()
 	{
-		
+		var component = GetComponent<Rigidbody>();
 		if (hasSideShiftLeft)
 		{
 			if (sideShiftTimer < 12)
 			{
-				rigidbody.AddRelativeForce(transform.InverseTransformDirection(-transform.right) * shipAirbrakeSideShiftAmount);
+				component.AddRelativeForce(transform.InverseTransformDirection(-transform.right) * shipAirbrakeSideShiftAmount);
 			}
 		}
 		
@@ -1475,7 +1481,7 @@ public class ShipController : MonoBehaviour {
 			if (sideShiftTimer < 12)
 			{
 				
-				rigidbody.AddRelativeForce(transform.InverseTransformDirection(transform.right) * shipAirbrakeSideShiftAmount);
+				component.AddRelativeForce(transform.InverseTransformDirection(transform.right) * shipAirbrakeSideShiftAmount);
 			}
 		}
 	}
@@ -1500,13 +1506,14 @@ public class ShipController : MonoBehaviour {
 		}
 
 		// Collision
+		var component = GetComponent<Rigidbody>();
 		if (shipIsColliding)
 		{
-			rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+			component.constraints = RigidbodyConstraints.FreezeRotation;
 		} else 
 		{
-			shipCollisionSpeed = transform.InverseTransformDirection(rigidbody.velocity);
-			rigidbody.constraints = RigidbodyConstraints.FreezeRotationY;
+			shipCollisionSpeed = transform.InverseTransformDirection(component.velocity);
+			component.constraints = RigidbodyConstraints.FreezeRotationY;
 		}
 
 		// Animation
@@ -1514,14 +1521,14 @@ public class ShipController : MonoBehaviour {
 		{
 			if (!ShipModel.GetComponent<Animation>().isPlaying)
 			{
-				ShipModel.GetComponent<Animation>().animation["ShipIdle"].speed = 1;
+				ShipModel.GetComponent<Animation>().GetComponent<Animation>()["ShipIdle"].speed = 1;
 				ShipModel.GetComponent<Animation>().Play("ShipIdle");
 			}
 		}
 		else
 		{
-			ShipModel.GetComponent<Animation>().animation["ShipIdle"].time = 0;
-			ShipModel.GetComponent<Animation>().animation.Stop();
+			ShipModel.GetComponent<Animation>().GetComponent<Animation>()["ShipIdle"].time = 0;
+			ShipModel.GetComponent<Animation>().GetComponent<Animation>().Stop();
 			ShipModel.transform.localPosition = Vector3.Lerp(ShipModel.transform.localPosition, new Vector3(0, 0, 0), Time.fixedDeltaTime * 10);
 			ShipModel.transform.localRotation = Quaternion.Euler(0, 0, 0);
 		}
@@ -1679,8 +1686,9 @@ public class ShipController : MonoBehaviour {
 
 			for (int i = 0; i < contactNum; i ++)
 			{
-				rigidbody.angularVelocity = new Vector3(0,0,0);
-				Vector3 collisionSpeed = rigidbody.GetPointVelocity(other.contacts[i].point);
+				var component = GetComponent<Rigidbody>();
+				component.angularVelocity = new Vector3(0,0,0);
+				Vector3 collisionSpeed = component.GetPointVelocity(other.contacts[i].point);
 				Vector3 collisionNormal = transform.InverseTransformDirection((transform.position - other.contacts[i].point).normalized);
 
 				if (shipAccel > shipEngineAccelCap / 2)
@@ -1688,14 +1696,14 @@ public class ShipController : MonoBehaviour {
 					shipAccel -= shipEngineGain / 100;
 				}
 
-				if (shipThrust > (shipEngineAccelCap * (rigidbody.drag * 2)))
+				if (shipThrust > (shipEngineAccelCap * (component.drag * 2)))
 				{
 					shipThrust -= Mathf.Abs(collisionSpeed.x + collisionSpeed.z) / (Time.deltaTime * 200);
 				}
 
 				if (collisionNormal.x < 0.3f)
 				{
-					float tempVelZ = transform.InverseTransformDirection(rigidbody.velocity).z;
+					float tempVelZ = transform.InverseTransformDirection(component.velocity).z;
 					//rigidbody.velocity = new Vector3(0,0,0);
 
 					//shipAccel = 0;
@@ -1710,10 +1718,10 @@ public class ShipController : MonoBehaviour {
 				{
 					if (collisionNormal.x < 0.1f || collisionNormal.x > -0.1f)
 					{
-						transform.Rotate(Vector3.up * collisionNormal.x * (transform.InverseTransformDirection(rigidbody.velocity).z) / 230);
+						transform.Rotate(Vector3.up * collisionNormal.x * (transform.InverseTransformDirection(component.velocity).z) / 230);
 					} else
 					{
-						transform.Rotate(Vector3.up * collisionNormal.x * (transform.InverseTransformDirection(rigidbody.velocity).z) / 250);
+						transform.Rotate(Vector3.up * collisionNormal.x * (transform.InverseTransformDirection(component.velocity).z) / 250);
 					}
 
 				}
@@ -1730,13 +1738,13 @@ public class ShipController : MonoBehaviour {
 					shipBoostTimer = 0;
 					shipThrust = 0;
 					shipThrust = 0;
-					rigidbody.velocity = new Vector3(0,0,0);
+					component.velocity = new Vector3(0,0,0);
 
 					if (tempvel > 15)
 					{
 						Audio_FloorHit.GetComponent<AudioSource>().Play();
 
-						rigidbody.AddRelativeForce(new Vector3(0,0, -tempvel), ForceMode.Impulse);
+						component.AddRelativeForce(new Vector3(0,0, -tempvel), ForceMode.Impulse);
 					}
 				}
 

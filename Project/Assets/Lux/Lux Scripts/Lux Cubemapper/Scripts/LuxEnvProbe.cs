@@ -155,17 +155,18 @@ public class LuxEnvProbe : MonoBehaviour {
         // Get all objects
         for (int i = 0; i < AssignedMeshes.Count; i++)
         {
-            if(AssignedMeshes[i].renderer != null)
+            var component = AssignedMeshes[i].GetComponent<Renderer>();
+            if(component != null)
             {
-                int materials = AssignedMeshes[i].renderer.sharedMaterials.Length;
+                int materials = component.sharedMaterials.Length;
                 // Get all materials
                 for (int j = 0; j < materials; j++) {
-                    if (AssignedMeshes[i].renderer.sharedMaterials[j].HasProperty("_CubemapPositionWS"))
+                    if (component.sharedMaterials[j].HasProperty("_CubemapPositionWS"))
                     {
-                        AssignedMeshes[i].renderer.sharedMaterials[j].SetVector("_CubemapPositionWS", new Vector4(transform.position.x, transform.position.y, transform.position.z, 0));
-                        AssignedMeshes[i].renderer.sharedMaterials[j].SetVector("_CubemapSize", new Vector4(BoxSize.x/2f, BoxSize.y, BoxSize.z/2f, 0));
+                        component.sharedMaterials[j].SetVector("_CubemapPositionWS", new Vector4(transform.position.x, transform.position.y, transform.position.z, 0));
+                        component.sharedMaterials[j].SetVector("_CubemapSize", new Vector4(BoxSize.x/2f, BoxSize.y, BoxSize.z/2f, 0));
                         if (SPECCube != null){
-                            AssignedMeshes[i].renderer.sharedMaterials[j].SetTexture("_SpecCubeIBL", SPECCube);
+                            component.sharedMaterials[j].SetTexture("_SpecCubeIBL", SPECCube);
                         }
                     }
                 }
@@ -194,12 +195,12 @@ public class LuxEnvProbe : MonoBehaviour {
 
         if (HDR == true)
         {
-            cubeCam.hdr = true;
+            cubeCam.allowHDR = true;
             texFor = TextureFormat.ARGB32;
         }
         else
         {
-            cubeCam.hdr = false;
+            cubeCam.allowHDR = false;
             texFor = TextureFormat.RGB24;
         }
         
@@ -271,12 +272,12 @@ public class LuxEnvProbe : MonoBehaviour {
 
             if (HDR == true)
             {
-                CubeCamera.hdr = true;
+                CubeCamera.allowHDR = true;
                 texFor = TextureFormat.ARGB32;
             }
             else
             {
-                CubeCamera.hdr = false;
+                CubeCamera.allowHDR = false;
                 texFor = TextureFormat.RGB24;
             }
 
